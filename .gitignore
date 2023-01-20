@@ -1,0 +1,7 @@
+.env
+.venv
+database.db
+id_discord.sql
+__pycache__
+bot_chaise.log
+sentences.sql
