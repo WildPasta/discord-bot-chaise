@@ -293,13 +293,9 @@ def sql_insert_sentence(custom_sentence):
     Insert the sentence in SQL database
     """
 
-    pattern = "[A-Za-z0-9!?:<>]{1,}"
-
     # Check if the sentence is valid
     if "<pseudo>" not in custom_sentence:
-        return "Il te manque <pseudo> dans ta phrase !"
-    elif not re.match(pattern, custom_sentence):
-        return "T'essaies de me la mettre là ?"
+        return "Il te manque <pseudo> dans ta phrase, ou peut-être as-tu oublié les \" !"
 
     # Insertion en base de données
     dbSocket = sqlite3.connect(database)
