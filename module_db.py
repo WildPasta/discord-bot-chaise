@@ -105,17 +105,21 @@ def sql_new_chaise(id,discord_application_id, easter_egg):
 
         result = cursor.fetchone()
 
-        logger.debug(f"result: {result}")
+        
 
         if result == None:
+            logger.debug(f"the user {id} is NOT in database")
             return False # if user not in game
+        logger.debug(f"the user {id} is in database")
 
         # If there was a combo, add three chaise
         if easter_egg == True:
+            logger.debug(f"Easter egg enable : increase 3 times the chaised value for {id}")
             req = "UPDATE USERS SET chaised = chaised + 3 WHERE id_discord = (?)"
             easter_egg = False
         # If there was no combo, add one chaise
         else:
+            logger.debug(f"Easter egg disable : increase 1 time the chaised value for {id}")
             req = "UPDATE USERS SET chaised = chaised + 1 WHERE id_discord = (?)"
         data = [str(id)]
         cursor.execute(req,data)
