@@ -1,5 +1,5 @@
 """
-# module_db.py v 1.7
+# module_db.py v 1.8.1
 # Written by WildPasta and NicoFgrx
 # Purpose: Interact with chaise database
 """
@@ -15,7 +15,7 @@ import sqlite3
 from random import randint
 
 database="database.db"
-logger = bot_chaise.setup_logger()
+logger = bot_chaise.setup_logger(__name__)
 
 
 # USERS TABLE METHODS
