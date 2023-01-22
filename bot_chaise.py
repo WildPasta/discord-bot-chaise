@@ -1,5 +1,5 @@
 """
-# bot_chaise.py v 1.7
+# bot_chaise.py v 1.81
 # Written by WildPasta and NicoFgrx
 # Purpose: roast people not present in class
 """
@@ -14,17 +14,19 @@ import sqlite3
 
 import module_db
 
-from random import randint, choice
+from datetime import datetime
 from dotenv import load_dotenv
 from discord.ext import commands
 from discord.ext.commands import cooldown, BucketType
+from pythonjsonlogger import jsonlogger
+from random import randint, choice
 
-version = "1.8"
+version = "1.81"
 database="database.db"
 
 def main():
     # Set up the logger
-    logger = setup_logger()
+    logger = setup_logger(__name__)
 
     # Load the environment variables
     load_dotenv()
@@ -60,7 +62,7 @@ def main():
         buff = []
         for item in arg.split():
             if item in buff:
-                logger.warning(f'{item} alredeay chaised in the current request by {ctx.message.author}')
+                logger.warning(f'{item} already chaised in the current request by {ctx.message.author}')
                 response = f"Euh mec ? <@{ctx.message.author.id}> Tu nous expliques pourquoi tu voulais chaise plusieurs fois {item} ?"
                 await ctx.send(response) 
                 continue  
@@ -333,16 +335,27 @@ def main():
     # Loop the bot
     bot.run(DISCORD_TOKEN)
 
+class CustomJsonFormatter(jsonlogger.JsonFormatter):
+    def add_fields(self, log_record, record, message_dict):
+        super(CustomJsonFormatter, self).add_fields(log_record, record, message_dict)
+        if not log_record.get('timestamp'):
+            # this doesn't use record.created, so it is slightly off
+            now = datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+            log_record['timestamp'] = now
+        if log_record.get('level'):
+            log_record['level'] = log_record['level'].upper()
+        else:
+            log_record['level'] = record.levelname
 
-def setup_logger():
+def setup_logger(name):
     # Initialize logger
-    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(name)
 
     # Set up logger debug level
     logger.setLevel(logging.DEBUG)
     
     # Set up the format of the log file
-    formatter = logging.Formatter('%(asctime)s %(name)s - %(levelname)s - %(message)s')
+    formatter = CustomJsonFormatter('%(timestamp)s %(level)s %(name)s %(message)s')
 
     # Set up file 
     file_handler = logging.FileHandler(('bot_chaise.log'))
