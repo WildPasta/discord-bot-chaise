@@ -273,7 +273,7 @@ def sql_get_random_sentence():
     dbSocket.commit()
     nb_sentence = cursor.fetchone()[0]
 
-    logger.debug("get random sentence: {nb_sentence}")
+    logger.debug(f"get random sentence: {nb_sentence}")
 
     # Get a random sentence
     rand_sentence_id = randint(1, nb_sentence)
