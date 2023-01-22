@@ -105,7 +105,7 @@ def sql_new_chaise(id,discord_application_id, easter_egg):
 
         result = cursor.fetchone()
 
-        logger.debug("result: {result}")
+        logger.debug(f"result: {result}")
 
         if result == None:
             return False # if user not in game
@@ -237,7 +237,7 @@ def sql_delete_sentence_by_id(id):
 
     # delete in sentences.sql
     to_delete = 'INSERT INTO PUNCH (label) VALUES("{}");'.format(sentence)
-    logger.debug("sentence to delete: {to_delete}")
+    logger.debug(f"sentence to delete: {to_delete}")
 
     with open("sentences.sql", "r") as f:
         lines = f.readlines()
