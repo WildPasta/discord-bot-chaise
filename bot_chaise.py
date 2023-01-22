@@ -1,5 +1,5 @@
 """
-# bot_chaise.py v 1.81
+# bot_chaise.py v 1.8.1
 # Written by WildPasta and NicoFgrx
 # Purpose: roast people not present in class
 """
@@ -21,7 +21,7 @@ from discord.ext.commands import cooldown, BucketType
 from pythonjsonlogger import jsonlogger
 from random import randint, choice
 
-version = "1.81"
+version = "1.8.1"
 database="database.db"
 
 def main():

@@ -1,5 +1,5 @@
 """
-# module_db.py v 1.81
+# module_db.py v 1.8.1
 # Written by WildPasta and NicoFgrx
 # Purpose: Interact with chaise database
 """
