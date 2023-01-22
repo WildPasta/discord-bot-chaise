@@ -105,17 +105,21 @@ def sql_new_chaise(id,discord_application_id, easter_egg):
 
         result = cursor.fetchone()
 
-        logger.debug("result: {result}")
+        
 
         if result == None:
+            logger.debug(f"the user {id} is NOT in database")
             return False # if user not in game
+        logger.debug(f"the user {id} is in database")
 
         # If there was a combo, add three chaise
         if easter_egg == True:
+            logger.debug(f"Easter egg enable : increase 3 times the chaised value for {id}")
             req = "UPDATE USERS SET chaised = chaised + 3 WHERE id_discord = (?)"
             easter_egg = False
         # If there was no combo, add one chaise
         else:
+            logger.debug(f"Easter egg disable : increase 1 time the chaised value for {id}")
             req = "UPDATE USERS SET chaised = chaised + 1 WHERE id_discord = (?)"
         data = [str(id)]
         cursor.execute(req,data)
@@ -237,7 +241,7 @@ def sql_delete_sentence_by_id(id):
 
     # delete in sentences.sql
     to_delete = 'INSERT INTO PUNCH (label) VALUES("{}");'.format(sentence)
-    logger.debug("sentence to delete: {to_delete}")
+    logger.debug(f"sentence to delete: {to_delete}")
 
     with open("sentences.sql", "r") as f:
         lines = f.readlines()
@@ -273,7 +277,7 @@ def sql_get_random_sentence():
     dbSocket.commit()
     nb_sentence = cursor.fetchone()[0]
 
-    logger.debug("get random sentence: {nb_sentence}")
+    logger.debug(f"get random sentence: {nb_sentence}")
 
     # Get a random sentence
     rand_sentence_id = randint(1, nb_sentence)

@@ -34,6 +34,13 @@ Increment the number of the *chaised* person.
 ```
 !chaise @someone
 ```
+### Chaise 🪑🪑
+
+Increment the number of the *chaised* person.
+
+```
+!chaise "@someone @someone_else"
+```
 
 ### Remove a chaise ❌
 
@@ -137,4 +144,6 @@ You can also remove an user with:
  - [X] Malus (+2 chaises) if you rejoin the game after rage-quitting
  - [X] Using logging module instead of print (DEBUG : message)
  - [X] Create !help command
- - [ ] Chaise multiple person
+ - [X] Chaise multiple person
+ - [ ] Add !changelog command
+ - [ ] Stock hardcoded sentences (responses from the bot) in database AND in FR/EN langage

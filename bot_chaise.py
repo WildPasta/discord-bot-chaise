@@ -19,7 +19,7 @@ from dotenv import load_dotenv
 from discord.ext import commands
 from discord.ext.commands import cooldown, BucketType
 
-version = "1.7"
+version = "1.8"
 database="database.db"
 
 def main():
@@ -54,31 +54,48 @@ def main():
     @bot.command(name="chaise")
     @commands.cooldown(1, 900, commands.BucketType.user)
     async def chaise(ctx, arg):
-        dbSocket = sqlite3.connect(database)
-        # Easter egg
-        roll = randint(0, 100)
-        easter_egg = False
-        if roll <= 10:
-            easter_egg = True
-            response = "Combo x3 :eyes:"
+
+        logger.info(f'{ctx.message.author} request chaise for user(s) {arg}')   
+
+        buff = []
+        for item in arg.split():
+            if item in buff:
+                logger.warning(f'{item} alredeay chaised in the current request by {ctx.message.author}')
+                response = f"Euh mec ? <@{ctx.message.author.id}> Tu nous expliques pourquoi tu voulais chaise plusieurs fois {item} ?"
+                await ctx.send(response) 
+                continue  
+                
+            buff.append(item) # don't want to multiple chaise the same person
+            
+            # Easter egg
+            roll = randint(0, 100)
+            easter_egg = False
+            if roll <= 10:
+                easter_egg = True
+                logger.info(f'{ctx.message.author} earn easter egg for {item}')   
+                response = "Combo x3 :eyes:"
+                await ctx.send(response)
+                for i in range(2): # send 2 punchs
+                    rand_sentence_label = module_db.sql_get_random_sentence()
+                    response = rand_sentence_label.replace('<pseudo>', item)
+                    await ctx.send(response)
+    
+            # insert in database 1 if easter_egg == False, 3 if True
+            # only if it is an id discord AND the id is in database
+            # also check if the multiple chaise don't chaise multiple time the same person
+            if re.match("\<\@\d+\>", item):                
+
+                if not module_db.sql_new_chaise(item, discord_application_id, easter_egg):
+                    response = "Et non, parce que ce mec n'est PAS FUN."
+                    await ctx.send(response)
+                    continue          
+            
+
+            logger.info(f'punchline send to {item}')
+
+            rand_sentence_label = module_db.sql_get_random_sentence()
+            response = rand_sentence_label.replace('<pseudo>', item)
             await ctx.send(response)
-            for i in range(2):
-                rand_sentence_label = module_db.sql_get_random_sentence()
-                response = rand_sentence_label.replace('<pseudo>', arg)
-                await ctx.send(response)
-
-        # Check if a Discord ID is mentioned
-        if re.match("\<\@\d+\>", arg):
-            if not module_db.sql_new_chaise(arg, discord_application_id, easter_egg):
-                response = "Et non, parce que ce mec n'est PAS FUN."
-                await ctx.send(response)
-                return 1
-
-        logger.info(f'{ctx.message.author} request chaise for user {arg}')
-
-        rand_sentence_label = module_db.sql_get_random_sentence()
-        response = rand_sentence_label.replace('<pseudo>', arg)
-        await ctx.send(response)
 
     @bot.command(name="top")
     async def top(ctx):
@@ -293,7 +310,7 @@ def main():
 
         logger.debug(f"{ctx.message.author} request help")
         
-        em.add_field(name="!chaise @someone", value="Chaise someone that arrived late", inline=False)
+        em.add_field(name="!chaise @someone or !chaise \"@someone @someone_else\"", value="Chaise someone that arrived late", inline=False)
         em.add_field(name="!unchaise @someone", value="Remove a chaise of someone", inline=False)
         em.add_field(name='!add "foo <pseudo> bar"', value="Add a sentence in the database", inline=False)
         em.add_field(name="!top", value="Display the leaderboard", inline=False)
