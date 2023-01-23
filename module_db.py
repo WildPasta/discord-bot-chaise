@@ -81,7 +81,7 @@ def sql_deluser(id):
     else:
         return "Pour supprimer une personne, utiliser !deluser @NickName"
 
-def sql_new_chaise(id,discord_application_id, easter_egg):
+def sql_new_chaise(id: str,discord_application_id, punches: int):
     """
     Check if a valid discord id is provided
     Increase number of chaised columns
@@ -98,7 +98,7 @@ def sql_new_chaise(id,discord_application_id, easter_egg):
 
         # check if users exists in USERS
         req = "SELECT id_discord FROM USERS WHERE id_discord = (?)"
-        data = [str(id)]
+        data = [id]
 
         cursor.execute(req, data)
         dbSocket.commit()
@@ -112,17 +112,11 @@ def sql_new_chaise(id,discord_application_id, easter_egg):
             return False # if user not in game
         logger.debug(f"the user {id} is in database")
 
-        # If there was a combo, add three chaise
-        if easter_egg == True:
-            logger.debug(f"Easter egg enable : increase 3 times the chaised value for {id}")
-            req = "UPDATE USERS SET chaised = chaised + 3 WHERE id_discord = (?)"
-            easter_egg = False
-        # If there was no combo, add one chaise
-        else:
-            logger.debug(f"Easter egg disable : increase 1 time the chaised value for {id}")
-            req = "UPDATE USERS SET chaised = chaised + 1 WHERE id_discord = (?)"
-        data = [str(id)]
-        cursor.execute(req,data)
+        # Chaise him
+        logger.debug(f'Increase {punches} times the chaised value for {id}')
+        req = "UPDATE USERS SET chaised = chaised + (?) WHERE id_discord = (?)"
+        data = [punches, id]
+        cursor.execute(req, data)
         cursor.close()
         dbSocket.commit()
 
@@ -130,20 +124,20 @@ def sql_new_chaise(id,discord_application_id, easter_egg):
         date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
         cursor = dbSocket.cursor()
         req = "INSERT INTO HISTORY (date, id_discord) VALUES ((?), (?))"
-        data = [date, str(id)]
+        data = [date, id]
         cursor.execute(req,data)
         cursor.close()
         dbSocket.commit()
 
         return True
 
-def sql_del_chaise(id, discord_application_id):
+def sql_del_chaise(id: str, discord_application_id):
     dbSocket = sqlite3.connect(database)
     cursor = dbSocket.cursor()
 
     # Retrieve the chaise count for a user
     req = "SELECT chaised FROM USERS WHERE id_discord = (?)"
-    data = [str(id)]
+    data = [id]
     
     cursor.execute(req, data)
     dbSocket.commit()
@@ -156,7 +150,7 @@ def sql_del_chaise(id, discord_application_id):
 
     # Decrease chaise count by 1
     req = "UPDATE USERS SET chaised = chaised - 1 WHERE id_discord = (?)"
-    data = [str(id)]
+    data = [id]
     cursor.execute(req, data)
     dbSocket.commit()
 

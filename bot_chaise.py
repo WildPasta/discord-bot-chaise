@@ -1,6 +1,6 @@
 """
 # bot_chaise.py v 1.8.1
-# Written by WildPasta and NicoFgrx
+# Written by WildPasta, NicoFgrx and PandatiX
 # Purpose: roast people not present in class
 """
 
@@ -59,45 +59,38 @@ def main():
 
         logger.info(f'{ctx.message.author} request chaise for user(s) {arg}')   
 
-        buff = []
-        for item in arg.split():
-            if item in buff:
-                logger.warning(f'{item} already chaised in the current request by {ctx.message.author}')
-                response = f"Euh mec ? <@{ctx.message.author.id}> Tu nous expliques pourquoi tu voulais chaise plusieurs fois {item} ?"
-                await ctx.send(response) 
-                continue  
-                
-            buff.append(item) # don't want to multiple chaise the same person
-            
-            # Easter egg
-            roll = randint(0, 100)
-            easter_egg = False
-            if roll <= 10:
-                easter_egg = True
-                logger.info(f'{ctx.message.author} earn easter egg for {item}')   
-                response = "Combo x3 :eyes:"
+        chaised = []
+        for user in arg.split():
+            # Check user is valid
+            if not re.match("\<\@\d+\>", user):
+                logger.debug(f'{user} is invalid')
+                continue
+
+            # Check don't chaise the same user multiple times
+            if user in chaised:
+                logger.debug(f'{user} already chaised in the current request by {ctx.message.author}')
+                response = f'Euh mec ? <@{ctx.message.author.id}> tu nous expliques pourquoi tu voulais chaise plusieurs fois {user} ?'
                 await ctx.send(response)
-                for i in range(2): # send 2 punchs
-                    rand_sentence_label = module_db.sql_get_random_sentence()
-                    response = rand_sentence_label.replace('<pseudo>', item)
-                    await ctx.send(response)
-    
-            # insert in database 1 if easter_egg == False, 3 if True
-            # only if it is an id discord AND the id is in database
-            # also check if the multiple chaise don't chaise multiple time the same person
-            if re.match("\<\@\d+\>", item):                
-
-                if not module_db.sql_new_chaise(item, discord_application_id, easter_egg):
-                    response = "Et non, parce que ce mec n'est PAS FUN."
-                    await ctx.send(response)
-                    continue          
+                continue
+            chaised.append(user)
             
-
-            logger.info(f'punchline send to {item}')
-
-            rand_sentence_label = module_db.sql_get_random_sentence()
-            response = rand_sentence_label.replace('<pseudo>', item)
-            await ctx.send(response)
+            # Chaise user
+            # => number of punches
+            punches = number_punches()
+            if punches != 0:
+                logger.info(f'{ctx.message.author} earn easter egg for {user}')
+                await ctx.send(f'Combo x{punches} :eyes:')
+            # => punchlines
+            for _ in range(punches):
+                logger.info(f'send punchline to {user}')
+                rand_sentence_label = module_db.sql_get_random_sentence()
+                response = rand_sentence_label.replace('<pseudo>', user)
+                await ctx.send(response)
+            # => database
+            if not module_db.sql_new_chaise(user, discord_application_id, punches):
+                response = "Eh non, parce que ce mec n'est **PAS FUN**."
+                await ctx.send(response)
+                continue
 
     @bot.command(name="top")
     async def top(ctx):
@@ -364,7 +357,13 @@ def setup_logger(name):
 
     logger.addHandler(file_handler)
 
-    return logger    
+    return logger
+
+def number_punches() -> int:
+    roll = randint(0, 100)
+    if roll <= 7:
+        return 3
+    return 1
 
 if __name__ == "__main__":
     if not os.path.exists(database):
