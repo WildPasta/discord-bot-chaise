@@ -342,6 +342,7 @@ class CustomJsonFormatter(jsonlogger.JsonFormatter):
             # this doesn't use record.created, so it is slightly off
             now = datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%fZ')
             log_record['timestamp'] = now
+        log_record['source'] = log_record.pop('name')
         if log_record.get('level'):
             log_record['level'] = log_record['level'].upper()
         else:
