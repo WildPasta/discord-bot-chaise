@@ -1,10 +1,11 @@
 """
-# bot_chaise.py v 1.8.1
+# bot_chaise.py v 1.8.2
 # Written by WildPasta, NicoFgrx and PandatiX
 # Purpose: roast people not present in class
 """
 
 # Imports
+import argparse
 import discord
 import logging
 import os
@@ -15,23 +16,31 @@ import sqlite3
 import module_db
 
 from datetime import datetime
-from dotenv import load_dotenv
 from discord.ext import commands
 from discord.ext.commands import cooldown, BucketType
 from pythonjsonlogger import jsonlogger
 from random import randint, choice
 
-version = "1.8.1"
+version = "1.8.2"
 database="database.db"
+
+parser = argparse.ArgumentParser()
+parser.add_argument("token", help="Discord token of your bot")
+parser.add_argument("id", help="Application ID of your bot")
+vars = parser.parse_args()
 
 def main():
     # Set up the logger
     logger = setup_logger(__name__)
 
-    # Load the environment variables
-    load_dotenv()
-    DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
-    discord_application_id = os.getenv('APPLICATION_ID')
+    # # Load the environment variables
+    # load_dotenv()
+    # DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
+    # discord_application_id = os.getenv('APPLICATION_ID')
+
+    DISCORD_TOKEN = vars.token
+    discord_application_id = vars.id
+
 
     # Load the discord intents
     intents = discord.Intents.all()
