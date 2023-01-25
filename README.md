@@ -4,6 +4,10 @@
 
 A simple discord bot that is designed to roast people arriving late (or not arriving at all) in class.
 
+Instructions preceded by ✨ require administrative rights.
+
+Administrative rights are granted to people with the role called `bot-admin`.
+
 ## Installing requirements
 
 Get a discord API token from the documentation [here](https://discordpy.readthedocs.io/en/stable/discord.html).
@@ -14,7 +18,6 @@ While retrieving the token API, also copy your **Application ID**.
 DISCORD_TOKEN="..."
 APPLICATION_ID="..."
 ```
-- Fill database with input catchphrases using `!add`
 
 Installation process follows.
 
@@ -23,6 +26,7 @@ python -m pip install -r requirements.txt
 python bot_chaise.py &
 ```
 
+- Fill database with input catchphrases using `!add`
 
 
 ## Features
@@ -124,6 +128,14 @@ You can also remove an user with:
 !deluser @someone
 ```
 
+### Repository link 🔗
+
+Request a link to the Github repository:
+
+````
+!repo
+```
+
 ## TO-DO
 
  - [X] Bot tagging the users
@@ -145,5 +157,3 @@ You can also remove an user with:
  - [X] Using logging module instead of print (DEBUG : message)
  - [X] Create !help command
  - [X] Chaise multiple person
- - [ ] Add !changelog command
- - [ ] Stock hardcoded sentences (responses from the bot) in database AND in FR/EN langage
