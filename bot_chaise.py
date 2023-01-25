@@ -295,13 +295,21 @@ def main():
         elif arg.isnumeric():
             response = module_db.sql_delete_sentence_by_id(int(arg))
             await ctx.send(response)
-    
+
+    @bot.command(name="repo")
+    async def help(ctx):
+        """
+        Send a link to the repo
+        """
+
+        await ctx.send("https://github.com/WildPasta/discord_bot_chaise")
+
     @bot.command(name="help")
     async def help(ctx):
         """
         Send the command and their description
         """
-        em = discord.Embed(title=f"Help command")
+        em = discord.Embed(title=f"Help command :sparkles: for admin :sparkles:")
 
         logger.debug(f"{ctx.message.author} request help")
         
@@ -312,10 +320,11 @@ def main():
         em.add_field(name="!version", value="Display the version", inline=False)
         em.add_field(name="!history", value="Show the last chaise, when someone is tagged, show the user history", inline=False)
         em.add_field(name="!list", value="List all the sentences in the database with their ID", inline=False)
-        em.add_field(name="!delete sentence_id", value="Delete a sentence based on its ID", inline=False)
-        em.add_field(name="!adduser @someone", value="Adding someone to the chaise game", inline=False)
-        em.add_field(name="!deluser @someone", value="Deleting a user from the chaise game", inline=False)
-        em.add_field(name="!reset", value="Reset the chaise count of everyone", inline=False)
+        em.add_field(name="!repo", value="Send a link to the bot repository", inline=False)
+        em.add_field(name=":sparkles: !delete sentence_id", value="Delete a sentence based on its ID", inline=False)
+        em.add_field(name=":sparkles: !adduser @someone", value="Adding someone to the chaise game", inline=False)
+        em.add_field(name=":sparkles: !deluser @someone", value="Deleting a user from the chaise game", inline=False)
+        em.add_field(name=":sparkles: !reset", value="Reset the chaise count of everyone", inline=False)
 
         await ctx.send(embed=em)
     
