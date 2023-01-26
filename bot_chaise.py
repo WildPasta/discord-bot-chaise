@@ -5,7 +5,6 @@
 """
 
 # Imports
-import argparse
 import discord
 import logging
 import os
@@ -24,23 +23,9 @@ from random import randint, choice
 version = "1.8.2"
 database="database.db"
 
-# parser = argparse.ArgumentParser()
-# parser.add_argument("token", help="Discord token of your bot")
-# parser.add_argument("id", help="Application ID of your bot")
-# vars = parser.parse_args()
-
 def main():
     # Set up the logger
     logger = setup_logger(__name__)
-
-    # # Load the environment variables with .env
-    # load_dotenv()
-    # DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
-    # DISCORD_APP_ID = os.getenv('APPLICATION_ID')
-
-    # Load variables with argparse
-    # DISCORD_TOKEN = vars.token
-    # DISCORD_APP_ID = vars.id
 
     # Load variables with environnement OS 
     DISCORD_TOKEN = os.environ["DISCORD_TOKEN"]
