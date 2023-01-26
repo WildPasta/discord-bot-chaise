@@ -9,19 +9,26 @@ A simple discord bot that is designed to roast people arriving late (or not arri
 Get a discord API token from the documentation [here](https://discordpy.readthedocs.io/en/stable/discord.html).
 While retrieving the token API, also copy your **Application ID**.
 
-- Create `.env` file as follows
-```env
-DISCORD_TOKEN="..."
-APPLICATION_ID="..."
+### Running on docker  
 ```
-- Fill database with input catchphrases using `!add`
-
-Installation process follows.
-
+docker build -t wildpasta/discord_bot_chaise:1.8.2 .
+docker run --env DISCORD_TOKEN="xxx" --env DISCORD_APP_ID="xxx" wildpasta/discord_bot_chaise:1.8.2
 ```
+
+
+### Running on host
+- Run the bot
+```
+export DISCORD_TOKEN="xxx"
+export DISCORD_APP_ID="xxx"
+
+
 python -m pip install -r requirements.txt
-python bot_chaise.py &
+python bot_discord &
 ```
+
+### Process
+- Fill database with input catchphrases using `!add`
 
 
 
@@ -145,5 +152,4 @@ You can also remove an user with:
  - [X] Using logging module instead of print (DEBUG : message)
  - [X] Create !help command
  - [X] Chaise multiple person
- - [ ] Add !changelog command
  - [ ] Stock hardcoded sentences (responses from the bot) in database AND in FR/EN langage

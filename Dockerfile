@@ -1,6 +1,6 @@
 FROM python:3.9
 
-LABEL version="1.8.1"
+LABEL version="1.8.2"
 LABEL repository="https://github.com/WildPasta/discord_bot_chaise"
 LABEL maintainer="WildPasta <chauve.richard@protonmail.com>"
 
