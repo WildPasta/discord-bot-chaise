@@ -24,23 +24,27 @@ from random import randint, choice
 version = "1.8.2"
 database="database.db"
 
-parser = argparse.ArgumentParser()
-parser.add_argument("token", help="Discord token of your bot")
-parser.add_argument("id", help="Application ID of your bot")
-vars = parser.parse_args()
+# parser = argparse.ArgumentParser()
+# parser.add_argument("token", help="Discord token of your bot")
+# parser.add_argument("id", help="Application ID of your bot")
+# vars = parser.parse_args()
 
 def main():
     # Set up the logger
     logger = setup_logger(__name__)
 
-    # # Load the environment variables
+    # # Load the environment variables with .env
     # load_dotenv()
     # DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
-    # discord_application_id = os.getenv('APPLICATION_ID')
+    # DISCORD_APP_ID = os.getenv('APPLICATION_ID')
 
-    DISCORD_TOKEN = vars.token
-    discord_application_id = vars.id
+    # Load variables with argparse
+    # DISCORD_TOKEN = vars.token
+    # DISCORD_APP_ID = vars.id
 
+    # Load variables with environnement OS 
+    DISCORD_TOKEN = os.environ["DISCORD_TOKEN"]
+    DISCORD_APP_ID = os.environ["DISCORD_APP_ID"]
 
     # Load the discord intents
     intents = discord.Intents.all()
@@ -96,7 +100,7 @@ def main():
                 response = rand_sentence_label.replace('<pseudo>', user)
                 await ctx.send(response)
             # => database
-            if not module_db.sql_new_chaise(user, discord_application_id, punches):
+            if not module_db.sql_new_chaise(user, DISCORD_APP_ID, punches):
                 response = "Eh non, parce que ce mec n'est **PAS FUN**."
                 await ctx.send(response)
                 continue
@@ -182,7 +186,7 @@ def main():
 
             # Unchaise only if the user mentioned is not the one who send the message
             if int(re.findall(r"\d+", arg)[0]) != ctx.message.author.id:
-                result = module_db.sql_del_chaise(arg, discord_application_id)
+                result = module_db.sql_del_chaise(arg, DISCORD_APP_ID)
                 
                 if not result:
                     response = "T'essaies de me douiller là ?"
@@ -231,7 +235,7 @@ def main():
             await ctx.send("Usage : !adduser @NickName")
             return 1
 
-        response = module_db.sql_adduser(arg, discord_application_id)
+        response = module_db.sql_adduser(arg, DISCORD_APP_ID)
         await ctx.reply(response)
         return 0
 
