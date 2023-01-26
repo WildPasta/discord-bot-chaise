@@ -24,7 +24,7 @@ export DISCORD_APP_ID="xxx"
 
 
 python -m pip install -r requirements.txt
-python bot_discord &
+python bot_chaise.py &
 ```
 
 ### Process
