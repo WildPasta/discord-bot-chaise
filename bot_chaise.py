@@ -77,7 +77,7 @@ def main():
             # Chaise user
             # => number of punches
             punches = number_punches()
-            if punches != 0:
+            if punches != 1:
                 logger.info(f'{ctx.message.author} earn easter egg for {user}')
                 await ctx.send(f'Combo x{punches} :eyes:')
             # => punchlines
